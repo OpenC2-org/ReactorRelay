@@ -1,0 +1,11 @@
+Django==1.10.2
+twilio==5.6.0
+jsonpatch==1.2
+jsonpointer==1.9
+jsonschema==2.5.1
+requests==2.6.0
+cybox==2.1.0.14
+mixbox==1.0.2
+MySQL-python==1.2.5
+paramiko==2.2.1
+virustotal-api==1.1.7

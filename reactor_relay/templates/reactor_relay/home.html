@@ -1,0 +1,364 @@
+{% extends 'reactor_relay/base.html' %}
+
+{% block content %}
+
+<h1 class="page-header">
+    {{relay_name}} - Configuration
+</h1>
+<ol class="breadcrumb">
+    <li class="active">
+        <i class="fa fa-dashboard"></i> Overview
+    </li>
+</ol>
+<div class="row">
+		<div class="col-lg-3 col-md-3">
+				<div class="panel panel-primary">
+						<div class="panel-heading">
+								<div class="row">
+										<div class="col-xs-3">
+												<i class="fa fa-wrench fa-5x"></i>
+										</div>
+										<div class="col-xs-9 text-right">
+												<div class="huge">{{actuators|length}}</div>
+												<div>Connected Actuators</div>
+										</div>
+								</div>
+						</div>
+						<a href="#" data-toggle="modal" data-target="#CreateActuator">
+								<div class="panel-footer">
+										<span class="pull-left">Create New Actuator</span>
+										<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+										<div class="clearfix"></div>
+								</div>
+						</a>
+				</div>
+		</div>
+		<div class="col-lg-3 col-md-3">
+				<div class="panel panel-yellow">
+						<div class="panel-heading">
+								<div class="row">
+										<div class="col-xs-3">
+												<i class="fa fa-cogs fa-5x"></i>
+										</div>
+										<div class="col-xs-9 text-right">
+												<div class="huge">{{capabilities|length}}</div>
+												<div>Capabilities</div>
+										</div>
+								</div>
+						</div>
+								<a href="#" data-toggle="modal" data-target="#CreateCapability">
+								<div class="panel-footer">
+										<span class="pull-left">Link New Capability</span>
+										<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+										<div class="clearfix"></div>
+								</div>
+						</a>										
+				</div>
+		</div>
+		<div class="col-lg-3 col-md-3">
+				<div class="panel panel-green">
+						<div class="panel-heading">
+								<div class="row">
+										<div class="col-xs-3">
+												<i class="fa fa-newspaper-o fa-5x"></i>
+										</div>
+										<div class="col-xs-9 text-right">
+												<div class="huge">{{profile_count}}</div>
+												<div>Active Code Profiles</div>
+										</div>
+								</div>
+						</div>
+								<a href="https://github.com/OpenC2-org/OrchID">
+								<div class="panel-footer">
+										<span class="pull-left">Read More On GitHub</span>
+										<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+										<div class="clearfix"></div>
+								</div>
+						</a>										
+				</div>
+		</div>
+		<div class="col-lg-3 col-md-3">
+				<div class="panel panel-red">
+						<div class="panel-heading">
+								<div class="row">
+										<div class="col-xs-3">
+												<i class="fa fa-tasks fa-5x"></i>
+										</div>
+										<div class="col-xs-9 text-right">
+												<div class="huge">{{jobs|length}}</div>
+												<div>Completed Jobs</div>
+										</div>
+								</div>
+						</div>
+								
+						<div class="panel-footer">
+			
+								<span class="pull-left">&nbsp</span>								
+								<div class="clearfix"></div>
+						</div>
+																
+				</div>
+		</div>
+</div>
+
+<div class="row">
+
+	<div class="col-lg-12 col-md-12">
+
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a	href="#1" data-toggle="tab"><i class="fa fa-wrench"></i> Connected Actuators ({{actuators|length}})</a>
+					</li>
+					<li>
+                        <a href="#2" data-toggle="tab"><i class="fa fa-cogs"></i> Available Capabilities ({{capabilities|length}})</a>
+					</li>
+					<li>
+                        <a href="#3" data-toggle="tab"><i class="fa fa-tasks"></i> Received Jobs ({{jobs|length}})</a>
+					</li>
+
+				</ul>
+
+				<div class="tab-content ">
+					<div class="tab-pane active" id="1">
+
+		              <div class="panel panel-default">
+
+            				<div class="panel-body" style="min-height:400px;max-height:400px;">
+            				<table id="actuators" class="table table-bordered table-hover table-striped" style="width:100%">
+            					<thead>
+            						<tr>
+            							<td>Name</td>
+            							<td>Type</td>
+            							<td>IP</td>
+            							<td>Username</td>
+            							<td>Password</td>	
+            							<td>Delete</td>						
+            						</tr>
+            					</thead>
+            					<tbody>
+            						{% for actuator in actuators %}
+            						<tr>
+            							<td>{{actuator.name}}</td>
+            							<td>{{actuator.openc2_type}}</td>
+            							<td>{{actuator.ip}}</td>
+            							<td>{{actuator.username}}</td>
+            							{% if actuator.password %}
+            							<td>**********</td>
+            							{% else %}
+            							<td>None</td>
+            							{% endif %}
+            							<td>
+            								<form method="POST">
+            									{% csrf_token %}
+            									<input type="hidden" name="delete_actuator_id" value={{actuator.id}}>
+            									<input type="submit" class="btn btn-sm btn-danger" value="Delete">
+            								</form>
+            							</td>
+            						</tr>
+            						{% endfor %}	
+            					</tbody>
+            				</table>
+            				</div>
+
+            		</div>
+            	</div>
+
+
+                <div class="tab-pane" id="2">
+            		<div class="panel panel-default">
+            			<div class="panel-body" style="min-height:400px;max-height:400px;">
+                			<table id="capabilities" class="table table-bordered table-hover table-striped" style="width:100%">
+                				<thead>
+                					<tr>
+                						<td>Name</td>
+                						<td>Actuator</td>
+                						<td>Action</td>
+                						<td>CybOX Object</td>
+                						<td>Profile</td>
+                						<td>Delete</td>
+                					</tr>
+                				</thead>
+                				<tbody>
+                					{% for cap in capabilities %}
+                					<tr>
+                						<td>{{cap.name}}</td>
+                						<td>{% for act in cap.actuators_set.all %}
+                								{{ act.name }}<br>
+                							{% endfor %}
+                						</td>
+                						<td>{{cap.action}}</td>
+                						<td>{{cap.requires.identifier}}</td>
+                						<td>{{cap.profile}}</td>
+                						<td>
+                							<form method="POST">
+                								{% csrf_token %}
+                								<input type="hidden" name="delete_capa_id" value={{cap.id}}>
+                								<input type="submit" class="btn btn-sm btn-danger" value="Delete">
+                							</form>
+                						</td>
+                					</tr>
+                					{% endfor %}	
+                				</tbody>
+                			</table>
+            			</div>
+		            </div>
+                </div>
+
+				<div class="tab-pane" id="3">
+            		<div class="panel panel-default">
+            			<div class="panel-body" style="min-height:400px;max-height:400px;">
+                			<table id="jobs" class="table table-bordered table-hover table-striped" style="width:100%">
+                				<thead>
+                					<tr>
+                						<td>ID</td>
+                						<td>Created</td>
+                						<td>Capability</td>
+                						<td>Actuator</td>
+                						<td>Raw</td>
+                						<td>Status</td>
+                					</tr>
+                				</thead>
+                				<tbody>
+                					{% for job in jobs %}
+                					<tr>
+                						<td>{{job.id}}</td>
+                						<td>{{job.created_at}}</td>
+                						<td>{{job.capability.name}}</td>
+                						<td>{{job.capability.actuator.name}}</td>
+                						<td>{{job.raw_message|linebreaks}}</td>
+										{% if job.status.status == "Success" %}
+				             				<td><span class="label label-success">Success <i class="fa fa-check-square-o" aria-hidden="true"></i></span></td>
+				             			{% elif job.status.status == "Failed" %}
+				             				<td><span class="label label-danger">Failed <i class="fa fa-times" aria-hidden="true"></i></span></td>
+				             			{% else %}
+				             				<td><span class="label label-warning">{{job.status.status}} <i class="fa fa-hourglass-half" aria-hidden="true"></i></span></td>
+				             			{% endif %}
+
+                					</tr>
+                					{% endfor %}	
+                				</tbody>
+                			</table>
+            			</div>
+		            </div>
+                </div>
+
+        </div>
+	</div>
+
+</div>
+
+<!--Creation Modals-->
+<div class="modal fade" id="CreateActuator" role="dialog">
+	<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Create A New Actuator</h4>
+				</div>
+				<form method="post" action="" autocomplete="off">
+				{% csrf_token %}
+					<div class="modal-body">
+								<center>
+									 	<table >
+									 		<tr>
+									 			<td>Actuator Name:</td>
+									 			<td>{{create_actuator_form.name}}</td>
+									 		</tr>
+									 		<tr>
+									 			<td>Actuator Type:</td>
+									 			<td>{{create_actuator_form.openc2_type}}</td>
+									 		</tr>
+									 		<tr>
+									 			<td>IP Address:</td>
+									 			<td>{{create_actuator_form.ip}}</td>
+									 		</tr>
+											<tr>
+												<td>Username:</td>
+												<td>{{create_actuator_form.username}}</td>
+											</tr>											 
+											<tr>
+												<td>Password:</td>
+												<td>{{create_actuator_form.password}}</td>
+											</tr>																					
+									 	</table>
+							 	</center>
+			 		</div>
+					<div class="modal-footer">
+						<input class="btn btn-primary" type="submit" value="Create" />
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+					</form>
+				</div>
+	</div>
+</div>
+
+<div class="modal fade" id="CreateCapability" role="dialog">
+	<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Create A New Capability</h4>
+				</div>
+				<form method="post" action="" autocomplete="off">
+				{% csrf_token %}
+					<div class="modal-body">
+								<center>
+									 	<table>
+									 		<tr>
+									 			<td>Name:</td>
+									 			<td>{{create_capability_form.name}}</td>
+									 		</tr>
+									 		<tr>
+									 			<td>Actuator:</td>
+
+									 			<td>
+									 				{% for choice in create_capability_form.actuators %}
+									 					<br>{{ choice }}
+									 				{% endfor %}
+									 			</td>
+									 		</tr>
+
+									 		<tr>
+									 			<td>Action:</td>
+									 			<td>{{create_capability_form.action}}</td>
+									 		</tr>
+									 		<tr>
+									 			<td>Requires:</td>
+									 			<td>{{create_capability_form.requires}}</td>
+									 		</tr>
+
+									 		<tr>
+									 			<td>Profile:</td>
+									 			<td>{{create_capability_form.profile}}</td>
+									 		</tr>
+
+									 	</table>
+
+									 	
+							 		</center>
+			 		</div>
+					<div class="modal-footer">
+						<input class="btn btn-primary" type="submit" value="Create" />
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+					</form>
+				</div>
+	</div>
+</div>
+
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+		$('#actuators').DataTable();
+		$('#capabilities').DataTable();
+		$('#jobs').DataTable({
+	        "order": [[ 0, "desc" ]]
+	    } );
+});
+</script>
+{% endblock %}
+
+

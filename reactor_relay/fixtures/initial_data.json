@@ -1,0 +1,58 @@
+[ 
+  {
+    "fields": {
+      "identifier": "cybox:AddressObjectType"
+    },
+    "model": "reactor_relay.CybOXType",
+    "pk": 1
+  },
+  {
+  	"fields": {
+  		"identifier": "cybox:NetworkConnectionObjectType"
+  	},
+  	"model": "reactor_relay.CybOXType",
+    "pk": 2
+  },
+  {
+        "fields": {
+                "identifier": "cybox:URIObjectType"
+        },
+        "model": "reactor_relay.CybOXType",
+    "pk": 3
+  },
+  {
+        "fields": {
+                "identifier": "cybox:EmailMessageObjectType"
+        },
+        "model": "reactor_relay.CybOXType",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "status": "Pending"
+    },
+    "model": "reactor_relay.JobStatus",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "status": "Sent"
+    },
+    "model": "reactor_relay.JobStatus",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "status": "Success"
+    },
+    "model": "reactor_relay.JobStatus",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "status": "Failed"
+    },
+    "model": "reactor_relay.JobStatus",
+    "pk": 4
+  }
+]
